@@ -48,14 +48,16 @@ def server(input, output, session):
     @output
     @render.text
     def txt():
-        if input.net1() == 0 and input.net2() == 0:
-            return "0"
-        else:
-            n1 = input.net1()*.9
-            n2 = input.net2()*.9
-            a = 2*impot((n1+n2)/2)-demipart*2*(input.parts()-2)
-            b = input.parts() * impot((n1+n2)/input.parts())
-            return f"{np.max([a,b]):.0f} euros"
+        n1 = input.net1()
+        n2 = input.net2()
+        if n1 is None: n1 = 0
+        if n2 is None: n2 = 0
+        # abattement fiscal
+        n1 = n1*.9
+        n2 = n2*.9
+        taxes = input.parts() * impot((n1+n2)/input.parts())
+        avantage_maximal_demipart = 2*impot((n1+n2)/2)-demipart*2*(input.parts()-2)
+        return f"{np.max([taxes,avantage_maximal_demipart]):,.0f} euros".replace(","," ")
 
 
 app = App(app_ui, server)
