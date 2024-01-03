@@ -1,0 +1,63 @@
+---
+title: Impôts
+format: html
+filters:
+  - shinylive
+---
+
+:::{.column-screen-inset}
+```{shinylive-python}
+#| standalone: true
+#| components: [editor, viewer]
+#| viewerHeight: 420
+
+import numpy as np
+from shiny import App, render, ui
+from htmltools import css
+import shinyswatch
+
+app_ui = ui.page_fluid(
+    {"class": "my-4"},
+    shinyswatch.theme.superhero(),
+    ui.panel_title("Impôts"),
+    ui.input_slider("parts", "Nombre de parts", 1, 4, 2.5, step=.5),
+    ui.input_numeric("net1", "Net fiscal 1", 50_000, min=1, max=1_000_000),
+    ui.input_numeric("net2", "Net fiscal 2", 50_000, min=1, max=1_000_000),
+    ui.output_text_verbatim("txt"),
+)
+
+T1 = 11_294
+T2 = 28_797
+T3 = 82_341
+T4 = 177_106
+demipart = 1_759
+
+def impot(s):
+  total = 0
+  if s>T1 and s<=T2:
+    total = (s-T1)*0.11
+  elif s>T2 and s<=T3:
+    total = (T2-T1)*0.11 + (s-T2)*0.3
+  elif s>T3 and s<=T4:
+    total = (T2-T1)*0.11 + (T3-T2)*0.3 + (s-T3)*0.41
+  elif s>T4:
+    total = (T2-T1)*0.11 + (T3-T2)*0.3 + (T4-T3)*0.41 + (s-T4)*0.45
+  return total
+
+def server(input, output, session):
+    @output
+    @render.text
+    def txt():
+        if input.net1() == 0 and input.net2() == 0:
+            return "0"
+        else:
+            n1 = input.net1()*.9
+            n2 = input.net2()*.9
+            a = 2*impot((n1+n2)/2)-demipart*2*(input.parts()-2)
+            b = input.parts() * impot((n1+n2)/input.parts())
+            return f"{np.max([a,b]):.0f} euros"
+
+
+app = App(app_ui, server)
+```
+:::

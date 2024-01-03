@@ -1,0 +1,7 @@
+---
+title: "About"
+---
+
+The official [taxes simulator](https://simulateur-ir-ifi.impots.gouv.fr/calcul_impot/2023/) can be confusing even the [simplified one](https://simulateur-ir-ifi.impots.gouv.fr/calcul_impot/2023/simplifie/index.htm). This project is just an extremely simplified estimation which can be wrong in many cases (isolated parents, people living outside metropolitan France, etc.) however it can be good enough for many people. Notice that none of the deductions are included (creches, aide a domicile, etc.) so you will need to estimate those as well. However, it has served me well to get a rough approximation of the taxes I will pay.
+
+For any problem, contact me on Twitter: [@alonsosilva](https://twitter.com/alonsosilva)
